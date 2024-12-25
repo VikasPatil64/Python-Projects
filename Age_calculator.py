@@ -1,5 +1,5 @@
 #AGE CALCULATOR
-import datetime
+from datetime import datetime
 
 def age_calculator(birthdate):
     today = datetime.today()
@@ -10,6 +10,10 @@ def age_calculator(birthdate):
 
 def main():
     birthdate_str=input("Enter Your birthdate (DD/MM/YYYY): ")
+    birthdate = datetime.strptime(birthdate_str, "%d/%m/%Y").date()
+    age=age_calculator(birthdate)
+    print(f"Your age is {age}")
+    
+if __name__ == "__main__":
+    main()
         
-    
-    
