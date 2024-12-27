@@ -22,7 +22,18 @@ def main():
     questions = [
         "What is your name?", 
         "How old are you?", 
-        "What is your favorite color?"
+        "What is your favorite color?",
+        "What do you study ?",
+        "What is your favorite food?"
+        "Which is favorite sport?",
+        "What is your favorite animal?",
+        "What is your favorite movie?",
+        "What is your favorite book?",
+        "What is your favorite music?"
+        "Where are you from ?",
+        "What is your favorite hobby?",
+        "What is your favorite place to visit?",
+        
         ]
     survey = Survey(questions)
     
