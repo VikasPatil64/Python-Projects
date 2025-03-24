@@ -1,25 +1,56 @@
 import requests
 import json
-import os
 import win32com.client as wincl
- 
-city = input("Enter city name: ")
-url = f"http://api.weatherapi.com/v1/current.json?key=cbac537e6b7c4b91a6f160132252403&q={city}"
+import os
 
-r = requests.get(url)
- 
-wdic = json.loads(r.text)
-print("City:", wdic["location"]["name"])
-print("Region:", wdic["location"]["region"])
-print("Country:", wdic["location"]["country"])
-print("Local Time:", wdic["location"]["localtime"])
-print("Temperature (°C):", wdic["current"]["temp_c"])
-print("Condition:", wdic["current"]["condition"]["text"])
+def get_weather(api_key, city):
+    """Fetch weather data from WeatherAPI.com"""
+    url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise error for HTTP failures
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching weather data: {e}")
+        return None
 
-speak = wincl.Dispatch("SAPI.SpVoice")
-speak.Speak(f"City: {wdic['location']['name']}")
-speak.Speak(f"Region: {wdic['location']['region']}")
-speak.Speak(f"Country: {wdic['location']['country']}")
-speak.Speak(f"Local Time: {wdic['location']['localtime']}")
-speak.Speak(f"Temperature: {wdic['current']['temp_c']} degree Celsius")
-speak.Speak(f"Condition: {wdic['current']['condition']['text']}")
+def speak_weather(weather_data):
+    """Announce weather using text-to-speech"""
+    speak = wincl.Dispatch("SAPI.SpVoice")
+    location = weather_data['location']
+    current = weather_data['current']
+    
+    weather_report = (
+        f"Weather in {location['name']}, {location['country']}: "
+        f"Temperature is {current['temp_c']}°C, "
+        f"Condition: {current['condition']['text']}. "
+        f"Local time is {location['localtime']}."
+    )
+    
+    print("\n=== Weather Report ===")
+    print(f"City: {location['name']}")
+    print(f"Region: {location['region']}")
+    print(f"Country: {location['country']}")
+    print(f"Local Time: {location['localtime']}")
+    print(f"Temperature: {current['temp_c']}°C")
+    print(f"Condition: {current['condition']['text']}\n")
+    
+    speak.Speak(weather_report)
+
+def main():
+    os.system("cls")
+    print("=== Python Weather App ===")
+    
+    # Note: Store API keys securely (use environment variables in real projects)
+    API_KEY = "cbac537e6b7c4b91a6f160132252403"
+    
+    city = input("Enter city name: ")
+    weather_data = get_weather(API_KEY, city)
+    
+    if weather_data:
+        speak_weather(weather_data)
+    else:
+        print("Failed to fetch weather data. Please try again.")
+
+if __name__ == "__main__":
+    main()
