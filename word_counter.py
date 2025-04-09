@@ -10,7 +10,7 @@ def word_counter(sentence):
     return word_counts
 
 def main():
-    sentence = input("Enter a sentence to count word occurrences: ")  # Corrected "sentecnce" to "sentence"
+    sentence = input("Enter a sentence to count word occurrences: ")   
     word_counts = word_counter(sentence)
     
     print("\nWord Occurrences:")  # Removed extra space in the output
